@@ -1,0 +1,145 @@
+-- Table: public.bracket
+
+-- DROP TABLE public.bracket;
+
+CREATE TABLE public.bracket
+(
+    bracket_id integer NOT NULL DEFAULT nextval('bracket_bracket_id_seq'::regclass),
+    round_id integer NOT NULL,
+    vech1_id integer NOT NULL,
+    vech2_id integer,
+    winner integer,
+    prev_bracket integer,
+    CONSTRAINT bracket_pkey PRIMARY KEY (bracket_id),
+    CONSTRAINT fk_prev_bracket FOREIGN KEY (prev_bracket)
+        REFERENCES public.bracket (bracket_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_round FOREIGN KEY (round_id)
+        REFERENCES public.round (round_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_vech1 FOREIGN KEY (vech1_id)
+        REFERENCES public.vechicle (vechicle_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_vech2 FOREIGN KEY (vech2_id)
+        REFERENCES public.vechicle (vechicle_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_winner FOREIGN KEY (winner)
+        REFERENCES public.vechicle (vechicle_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.bracket
+    OWNER to raceday;
+
+-- Table: public.participant
+
+-- DROP TABLE public.participant;
+
+CREATE TABLE public.participant
+(
+    participant_id bigint NOT NULL DEFAULT nextval('participant_participant_id_seq'::regclass),
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    race_id integer NOT NULL,
+    CONSTRAINT pk_pid PRIMARY KEY (participant_id),
+    CONSTRAINT fk_race FOREIGN KEY (race_id)
+        REFERENCES public.race (race_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.participant
+    OWNER to raceday;
+
+-- Table: public.race
+
+-- DROP TABLE public.race;
+
+CREATE TABLE public.race
+(
+    race_id integer NOT NULL DEFAULT nextval('race_race_id_seq'::regclass),
+    race_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT race_pkey PRIMARY KEY (race_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.race
+    OWNER to raceday;
+
+-- Table: public.round
+
+-- DROP TABLE public.round;
+
+CREATE TABLE public.round
+(
+    round_id integer NOT NULL DEFAULT nextval('round_round_id_seq'::regclass),
+    race_id integer NOT NULL,
+    round_num integer NOT NULL,
+    completed boolean NOT NULL DEFAULT false,
+    CONSTRAINT round_pkey PRIMARY KEY (round_id),
+    CONSTRAINT fk_race FOREIGN KEY (round_id)
+        REFERENCES public.race (race_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.round
+    OWNER to raceday;
+
+-- Table: public.users
+
+-- DROP TABLE public.users;
+
+CREATE TABLE public.users
+(
+    username character varying(25) COLLATE pg_catalog."default" NOT NULL,
+    password_hash character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    active boolean NOT NULL DEFAULT true,
+    CONSTRAINT users_pkey PRIMARY KEY (username)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.users
+    OWNER to raceday;
+
+-- Table: public.vechicle
+
+-- DROP TABLE public.vechicle;
+
+CREATE TABLE public.vechicle
+(
+    vechicle_id integer NOT NULL DEFAULT nextval('vechicle_vechicle_id_seq'::regclass),
+    participant_id integer NOT NULL,
+    tag character varying COLLATE pg_catalog."default",
+    CONSTRAINT vechicle_pkey PRIMARY KEY (vechicle_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.vechicle
+    OWNER to raceday;
+
