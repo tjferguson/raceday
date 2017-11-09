@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 /**
  *
- * @author Travis
+ * @author Travis <tjferguson>
  */
 @ConfigurationProperties(prefix="settings")
 @Component
