@@ -1,5 +1,5 @@
 <div class="form_panel" th:fragment="racemgmt2">
-    <h1 th:text="|'Next Race in Round ' + ${roundNum}"></h1>
+    <h1 th:text="|${roundNum!=null?'Next Race in Round '+roundNum:'Completed'}"></h1>
     <input type="hidden" name="bracketId" th:value="${bracket.bracketId}" id="bracketId" />
     <div th:if="${message}">
        <div>This race is completed</div>
@@ -13,7 +13,12 @@
                 <td>vs</td>
             </tr>
             <tr>
-                <td th:text="|${vech2name} (${vech2tag})|"></td><td><input type="button" class="vechSave" th:value="${bracket.vech2Id}" /></td>
+                <td th:text="|${vech2name} (${vech2tag})|"></td>
+                <td>
+                    <div th:if="${bracket.vech2Id > 0}">
+                        <input type="button" class="vechSave" th:value="${bracket.vech2Id}" />
+                    </div>
+                </td>
             </tr>
         </table>
     </div>
