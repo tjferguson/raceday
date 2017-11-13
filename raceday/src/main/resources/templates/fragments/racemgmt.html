@@ -1,0 +1,12 @@
+<div class="form_panel" th:fragment="racemgmt">
+    <h3>Race Management</h3>
+    <table>
+        <tr><th>Race ID</th><th>Name</th></tr>
+        <tr th:each="race: ${races}">
+            <td>
+                <a th:href="@{/racemgmt2(id=${race.raceId})}" th:text="${race.raceId}" />
+            </td>
+            <td th:text="${race.name}"></td>
+        </tr>
+    </table>
+</div>

@@ -13,25 +13,15 @@
             <h1 class="raceday">Rain Gutter Regatta</h1>
             <a href="/admin" class="loginbtn">Admin</a>
             <main id="tournament">
-                    <ul class="round">
+                <ul class="round" th:each="bracket: ${brackets}">
+                    <li class="spacer">&nbsp;</li>
+                    <th:block th:each="b : ${bracket}">
+                        <li class="race race-top" th:text="|${b.vech1.participant} ${b.vech1.tag!=null?'('+b.vech1.tag+')':''}|"></li>
+                        <li class="race race-spacer"><span class='winnerspan' th:text="${b.winner!=null?b.winner.tag:'Not Yet Ran'}"></span>&nbsp;</li>
+                        <li class="race race-bottom" th:text="|${b.vech2.participant} ${b.vech2.tag!=null?'('+b.vech2.tag+')':''}|"></li>
                         <li class="spacer">&nbsp;</li>
-                        <li class="race race-top winner">Travis F.<span>Win</span></li>
-                        <li class="race race-spacer">&nbsp;</li>
-                        <li class="race race-bottom ">Beckett F.<span>Loss</span></li>
-                        <li class="spacer">&nbsp;</li>
-                        <li class="race race-top winner">Travis F.<span>Win</span></li>
-                        <li class="race race-spacer">&nbsp;</li>
-                        <li class="race race-bottom ">Beckett F.<span>Loss</span></li>
-                        <li class="spacer">&nbsp;</li>
-                    </ul>
-                    <ul class="round">
-                        <li class="spacer">&nbsp;</li>
-                        <li class="race race-top winner">Travis F.<span>Win</span></li>
-                        <li class="race race-spacer">&nbsp;</li>
-                        <li class="race race-bottom ">Beckett F.<span>Loss</span></li>
-                        
-                        <li class="spacer">&nbsp;</li>
-                    </ul>
+                    </th:block>
+                </ul>
             </main>
         </div>
     </body>

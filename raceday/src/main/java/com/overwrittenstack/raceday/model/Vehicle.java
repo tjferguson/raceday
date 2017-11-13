@@ -10,10 +10,8 @@ package com.overwrittenstack.raceday.model;
  */
 public class Vehicle {
     private int vehicleId;
-    
     private int participantId;
     private Participant participant;
-    
     private String tag;
 
     /**
@@ -72,4 +70,20 @@ public class Vehicle {
         this.tag = tag;
     }
     
+    
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Vehicle) {
+            Vehicle v = (Vehicle) o;
+            if(v.getVehicleId() == this.getVehicleId()) return true;
+            else return false;
+        } else {
+            return false;
+        }
+    }
+    
+    @Override
+    public int hashCode() {
+        return this.vehicleId;
+    }
 }

@@ -1,0 +1,23 @@
+<div class="form_panel" th:fragment="participant">
+    <h3>Participant</h3>
+    <form th:action="@{/participant}" method="POST" th:object="${participant}">
+        <input type="hidden" th:value="${participantId}" name="participantId" />
+    <table>
+        <tr>
+            <th>Name</th>
+            <td><input type="text" name="name" th:value="${participant.name}" /></td>
+        </tr>
+        <tr>
+            <th>Race</th>
+            <td>
+                <select name="raceId">
+                    <option th:each="race:${races}" th:value="${race.raceId}" th:text="${race.name}" th:selected="${participant.race.raceId==race.raceId}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Save" /> <input type="reset" value="Reset" /></td>
+        </tr>
+    </table>
+    </form>
+</div>

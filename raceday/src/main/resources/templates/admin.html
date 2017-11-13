@@ -8,9 +8,9 @@
         <link href="/css/main.css" media="screen" rel="stylesheet" />
     </head>
     <body>
+        <a href="/admin">Back to Admin</a>
         <div id="container">
-            <div th:replace="@{'fragments/' + ${pageTemplate}} :: ${pageTemplate}"></div>
-            
+            <div th:replace="@{'fragments/' + ${page}} :: ${page}"></div>
         </div>
     </body>
 </html>

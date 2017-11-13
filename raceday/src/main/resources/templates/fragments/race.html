@@ -1,0 +1,12 @@
+<div class="form_panel" th:fragment="race">
+    <h3><th:block th:text="|${raceId==-1?'New':'Edit'}|"></th:block> Race</h3>
+    <form th:action="@{/race}" method="POST" th:object="${race}">
+        <input type="hidden" name="raceId" th:value="${raceId}" />
+    <table>
+        <tr><th>Race Name</th><td><input type="text" name="name" th:value="${race.name}" /></td></tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Save" /> <input type="reset" value="Reset" /></td>
+        </tr>
+    </table>
+    </form>
+</div>

@@ -1,0 +1,24 @@
+<div class="form_panel" th:fragment="boat">
+    <h3>Boat</h3>
+    <form th:action="@{/boat}" method="POST" th:object="${vehicle}">
+        <input type="hidden" th:value="${vehicleId}" name="vehicleId" />
+    <table>
+        <tr>
+            <th>Tag</th>
+            <td><input type="text" name="tag" th:value="${vehicle.tag}" /></td>
+        </tr>
+        <tr>
+            <th>Participant</th>
+            <td>
+                <select name="participantId">
+                    <option />
+                    <option th:each="participant:${participants}" th:value="${participant.participantId}" th:text="|${participant.name} (${participant.participantId})|" th:selected="${participant.participantId==vehicle.participantId}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Save" /> <input type="reset" value="Reset" /></td>
+        </tr>
+    </table>
+    </form>
+</div>

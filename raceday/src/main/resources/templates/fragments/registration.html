@@ -1,0 +1,27 @@
+<div class="form_panel" th:fragment="registration">
+    <h3>New Registration</h3>
+    <form th:action="@{/registration}" method="POST" th:object="${registration}">
+    <div class="message" th:text="${message}" />
+    <table>
+        <tr>
+            <th>Name</th>
+            <td><input type="text" name="name" /></td>
+        </tr>
+        <tr>
+            <th>Tag</th>
+            <td><input type="text" name="vehicleTag" /></td>
+        </tr>
+        <tr>
+            <th>Race</th>
+            <td>
+                <select name="raceId">
+                    <option th:each="race:${races}" th:value="${race.raceId}" th:text="${race.name}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Save" /> <input type="reset" value="Reset" /></td>
+        </tr>
+    </table>
+    </form>
+</div>

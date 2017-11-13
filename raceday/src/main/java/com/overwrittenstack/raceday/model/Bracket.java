@@ -12,6 +12,8 @@ public class Bracket {
         private int bracketId;
         private int roundId;
         private Round round;
+        private int vech1Id;
+        private int vech2Id;
         private Vehicle vech1;
         private Vehicle vech2;
         private int winnerId;
@@ -143,5 +145,33 @@ public class Bracket {
      */
     public void setLastBracket(Bracket lastBracket) {
         this.lastBracket = lastBracket;
+    }
+
+    /**
+     * @return the vech1Id
+     */
+    public int getVech1Id() {
+        return vech1Id;
+    }
+
+    /**
+     * @param vech1Id the vech1Id to set
+     */
+    public void setVech1Id(int vech1Id) {
+        this.vech1Id = vech1Id;
+    }
+
+    /**
+     * @return the vech2Id
+     */
+    public int getVech2Id() {
+        return vech2Id;
+    }
+
+    /**
+     * @param vech2Id the vech2Id to set
+     */
+    public void setVech2Id(int vech2Id) {
+        this.vech2Id = vech2Id;
     }
 }

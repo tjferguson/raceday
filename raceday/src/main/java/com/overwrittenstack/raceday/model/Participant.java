@@ -70,4 +70,9 @@ public class Participant {
         this.race = race;
     }
     
+    @Override
+    public String toString() {
+        return this.name;
+    }
+    
 }
