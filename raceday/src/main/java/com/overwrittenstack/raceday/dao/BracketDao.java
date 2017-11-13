@@ -33,10 +33,10 @@ public class BracketDao {
     private static final String DELETE = "delete from public.bracket where bracket_id=?";
     private static final String DELETE_ALL = "delete from public.bracket";
 
-    private static final String SELECT_ONE = "SELECT bracket_id, round_id, vech1_id, vech2_id, winner, prev_bracket FROM public.bracket where bracket_id=?";
-    private static final String SELECT_ALL = "SELECT bracket_id, round_id, vech1_id, vech2_id, winner, prev_bracket FROM public.bracket;";
-    private static final String SELECT_BY = "SELECT bracket_id, round_id, vech1_id, vech2_id, winner, prev_bracket FROM public.bracket where round_id=?";
-    private static final String SELECT_NEXT = "SELECT bracket_id, round_id, vech1_id, vech2_id, winner, prev_bracket FROM public.bracket where round_id=? and (winner = null OR winner=0) limit 1";
+    private static final String SELECT_ONE = "SELECT bracket_id, round_id, vech1_id, vech2_id, winner, prev_bracket FROM public.bracket where bracket_id=? order by bracket_id";
+    private static final String SELECT_ALL = "SELECT bracket_id, round_id, vech1_id, vech2_id, winner, prev_bracket FROM public.bracket order by bracket_id;";
+    private static final String SELECT_BY = "SELECT bracket_id, round_id, vech1_id, vech2_id, winner, prev_bracket FROM public.bracket where round_id=? order by bracket_id";
+    private static final String SELECT_NEXT = "SELECT bracket_id, round_id, vech1_id, vech2_id, winner, prev_bracket FROM public.bracket where round_id=? and (winner = null OR winner=0) order by bracket_id limit 1";
     private static final String SELECT_WINNERS = "SELECT vechicle_id, participant_id, tag FROM public.vechicle where vechicle_id in (select winner from public.bracket where round_id=?)";
     
     public Bracket create(Bracket b) {

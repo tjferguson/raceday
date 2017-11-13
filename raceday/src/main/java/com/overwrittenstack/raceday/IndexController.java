@@ -12,18 +12,23 @@ import com.overwrittenstack.raceday.model.Race;
 import com.overwrittenstack.raceday.model.Registration;
 import com.overwrittenstack.raceday.model.Round;
 import com.overwrittenstack.raceday.model.Vehicle;
+import com.overwrittenstack.raceday.model.WinnerRequest;
 import com.overwrittenstack.raceday.service.BracketManager;
 import com.overwrittenstack.raceday.service.ParticipantManager;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -53,15 +58,24 @@ public class IndexController {
     @Autowired
     private RoundDao roundDao;
     
-    
-    
     @RequestMapping("/")
     public ModelAndView getHome(ModelMap model, Principal principal) {
-        int raceId = 0;
+        Race race = raceDao.getFirst();
+        System.out.println("Race: " + race + " - " + race.getRaceId());
+        List<List<Bracket>> brackets = bracketManager.getLoadedBracket(race.getRaceId());
+        System.out.println("Brackets: " + brackets);
+        model.addAttribute("brackets", brackets);
+        return new ModelAndView("index", model);
+    }
+    
+    @RequestMapping("/bracket")
+    public ModelAndView getHomeById(@RequestParam("id") int id, ModelMap model) {
+        int raceId = id;
         List<List<Bracket>> brackets = bracketManager.getLoadedBracket(raceId);
         model.addAttribute("brackets", brackets);
         return new ModelAndView("index", model);
     }
+    
     
     
     @RequestMapping("/races")
@@ -160,8 +174,6 @@ public class IndexController {
     }
     
     
-    
-    
     @RequestMapping("/participants")
     public ModelAndView getPartis(ModelMap model, Principal princ) {
         List<Participant> participants = participantManager.getAllParticipants(true);
@@ -224,7 +236,7 @@ public class IndexController {
         //get our max round and if it is completed yet
         //if no round, or existing round is completed, we need to create a new round
         //assuming the participants from last round > 2
-        
+        boolean giveBracket = true;
         Round r = roundDao.getLastByRace(id);
         if(r == null) {
             //Create a new round 1
@@ -241,34 +253,45 @@ public class IndexController {
             }
             r = roundDao.getLastByRace(id);
         } else if(r.isCompleted()) {
-            //TODO need code that processes a post of a race completion, then decides if there are no races with 0 as the winner
-            //, if so, it marks the existing round complete
-            
             //Next round, but we had a previous one, so we are good
-            Round r2 = new Round();
-            r2.setCompleted(false);
-            r2.setRaceId(id);
-            r = roundDao.create(r2);
-            
+            int prevRoundId = r.getRoundId();
             //Select our winners from the previous round
-            List<Vehicle> vechs = participantManager.getWinnersForRound(id, true);
-            List<Bracket> brackets = RaceRandomizer.makeBracket(vechs, r.getRoundId(), 0, true);
-            brackets.forEach((b) -> {
-                bDao.create(b);
-            });
+            List<Vehicle> vechs = participantManager.getWinnersForRound(prevRoundId, true);
+            
+            if(vechs != null && vechs.size() > 1) {
+                Round r2 = new Round();
+                r2.setCompleted(false);
+                r2.setRaceId(id);
+                r2.setRound(r.getRound()+1);
+                r = roundDao.create(r2);
+
+                List<Bracket> brackets = RaceRandomizer.makeBracket(vechs, r.getRoundId(), 0, false);
+                brackets.forEach((b) -> {
+                    bDao.create(b);
+                });
+            } else {
+                System.out.println("Set message");
+                model.addAttribute("message", "This race is completed");
+                giveBracket = false;
+            }
         }
-        Bracket bracket = bracketManager.getNext(r.getRoundId());
-        if(bracket.getVech1() != null  && bracket.getVech1().getParticipant() != null) {
-            model.addAttribute("vech1name", bracket.getVech1().getParticipant().getName());
-            model.addAttribute("vech1tag", bracket.getVech1().getTag());
+        if(giveBracket) {
+            Bracket bracket = bracketManager.getNext(r.getRoundId());
+            if(bracket.getVech1() != null  && bracket.getVech1().getParticipant() != null) {
+                model.addAttribute("vech1name", bracket.getVech1().getParticipant().getName());
+                model.addAttribute("vech1tag", bracket.getVech1().getTag());
+            }
+
+            if(bracket.getVech2() != null && bracket.getVech2().getParticipant() != null) {
+                model.addAttribute("vech2name", bracket.getVech2().getParticipant().getName());
+                model.addAttribute("vech2tag", bracket.getVech2().getTag());
+            }
+            model.addAttribute("bracket", bracket);
+            model.addAttribute("roundNum", bracket.getRound().getRound());
+        } else {
+            model.addAttribute("bracket", new Bracket());
         }
         
-        if(bracket.getVech2() != null && bracket.getVech2().getParticipant() != null) {
-            model.addAttribute("vech2name", bracket.getVech2().getParticipant().getName());
-            model.addAttribute("vech2tag", bracket.getVech2().getTag());
-        }
-        
-        model.addAttribute("bracket", bracket);
         model.addAttribute("page", "racemgmt2");
         return new ModelAndView("admin", model);
     }
@@ -311,13 +334,35 @@ public class IndexController {
         return new ModelAndView("admin", model);
     }
     
-      
-    
     
     @RequestMapping("/admin")
     public ModelAndView getAdmin(ModelMap model, Principal principal) {
         model.addAttribute("page", "admin_home");
         return new ModelAndView("admin", model);
+    }
+    
+    @PostMapping("/savebracket")
+    public @ResponseBody Map<String, String> getSave(@RequestBody WinnerRequest wr) {
+        int bracketId = wr.getBracketId();
+        System.out.println("Winner: " + bracketId + " - " + wr.getWinner());
+        Bracket b = bDao.get(bracketId);
+        b.setWinnerId(wr.getWinner());
+        bDao.update(b);
+        
+        int roundId = b.getRoundId();
+        Bracket next = bDao.getNext(roundId);
+        if(next == null) {
+            //Complete our round out
+            Round r = roundDao.get(roundId);
+            r.setCompleted(true);
+            roundDao.update(r);
+        }
+        
+        Map<String, String> map = new HashMap<>();
+        map.put("status", "valid");
+        map.put("message", "Saved");
+        
+        return map;
     }
     
 }

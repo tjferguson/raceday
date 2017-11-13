@@ -34,7 +34,7 @@ public class RoundDao {
     
     private static final String SELECT_ONE = "SELECT round_id,race_id, round_num, completed FROM public.round where round_id=?";
     private static final String SELECT_ALL = "SELECT round_id,race_id, round_num, completed FROM public.round;";
-    private static final String SELECT_BY = "SELECT round_id,race_id, round_num, completed FROM public.round where race_id=?";
+    private static final String SELECT_BY = "SELECT round_id,race_id, round_num, completed FROM public.round where race_id=? order by round_num ";
     private static final String SELECT_LAST_BY_RACE = "SELECT round_id,race_id, round_num, completed from public.round where race_id=? order by round_num desc limit 1";
     
     public Round create(Round r) {
@@ -88,8 +88,8 @@ public class RoundDao {
         return jdbcTemplate.query(SELECT_ALL, new RoundMapper());
     }
     
-    public List<Round> getByRace(int roundId) {
-        return jdbcTemplate.query(SELECT_BY, new Integer[] {roundId}, new RoundMapper());
+    public List<Round> getByRace(int raceId) {
+        return jdbcTemplate.query(SELECT_BY, new Integer[] {raceId}, new RoundMapper());
     }
     
     public Round getLastByRace(int raceId) {

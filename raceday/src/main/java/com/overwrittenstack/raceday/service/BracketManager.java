@@ -9,7 +9,6 @@ import com.overwrittenstack.raceday.dao.ParticipantDao;
 import com.overwrittenstack.raceday.dao.RaceDao;
 import com.overwrittenstack.raceday.dao.RoundDao;
 import com.overwrittenstack.raceday.dao.VehicleDao;
-import com.overwrittenstack.raceday.helper.RaceRandomizer;
 import com.overwrittenstack.raceday.model.Bracket;
 import com.overwrittenstack.raceday.model.Participant;
 import com.overwrittenstack.raceday.model.Race;
@@ -55,32 +54,34 @@ public class BracketManager {
      */
     public List<List<Bracket>> getLoadedBracket(int raceId) {
         List<List<Bracket>> brackets = new ArrayList<>();
-        List<Bracket> bracket = new ArrayList<>();
-        List<Vehicle> vechs = new ArrayList<>();
-        for(int i = 1; i < 25; i++) {
-            Vehicle v1 = new Vehicle();
-            v1.setVehicleId(i);
-            v1.setTag("t"+i);
-            Participant p = new Participant();
-            p.setName("P" + i);
-            v1.setParticipant(p);
-            vechs.add(v1);
+        //get rounds first
+        List<Round> rounds = roundDao.getByRace(raceId);
+        for(Round r:rounds) {
+            List<Bracket> bracket = bDao.getByRound(r.getRoundId());
+            List<Bracket> bracketTemp = new ArrayList<>();
+            for(Bracket b: bracket) {
+                Vehicle v1 = participantManager.getVehicle(b.getVech1Id(), true);
+                Vehicle v2 = new Vehicle();
+                
+                if(b.getVech2Id() > 0) {
+                    v2 = participantManager.getVehicle(b.getVech2Id(), true);
+                } else {
+                    v2.setTag("Bye");
+                    Participant p = new Participant();
+                    p.setName("Bye");
+                    p.setParticipantId(-1);
+                    v2.setParticipant(p);
+                    v2.setParticipantId(-1);
+                }
+                if(b.getWinnerId() > 0) {
+                    b.setWinner(participantManager.getVehicle(b.getWinnerId(), true));
+                }
+                b.setVech1(v1);
+                b.setVech2(v2);
+                bracketTemp.add(b);
+            }
+            brackets.add(bracketTemp);
         }
-        bracket = RaceRandomizer.makeBracket(vechs, 0, 0, true);
-        brackets.add(bracket);
-        
-        vechs = new ArrayList<>();
-        for(int i = 1; i < 17; i++) {
-            Vehicle v1 = new Vehicle();
-            v1.setVehicleId(i);
-            v1.setTag(""+i);
-            Participant p = new Participant();
-            p.setName("P" + i);
-            v1.setParticipant(p);
-            vechs.add(v1);
-        }
-        bracket = RaceRandomizer.makeBracket(vechs, 0, 0, false);
-        brackets.add(bracket);
         return brackets;
     }
 

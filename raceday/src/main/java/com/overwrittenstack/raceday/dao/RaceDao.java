@@ -33,6 +33,8 @@ public class RaceDao {
     
     private static final String GET_ONE = "SELECT race_id, race_name from race where race_id=?";
     private static final String GET = "select race_id, race_name from race";
+    private static final String GET_FIRST = "SELECT race_id, race_name from race order by race_id limit 1;";
+    
     
     public Race create(Race r) {
         KeyHolder holder = new GeneratedKeyHolder();
@@ -69,6 +71,15 @@ public class RaceDao {
     
     public Race get(int raceId) {
         List<Race> races = jdbcTemplate.query(GET_ONE, new Integer[] {raceId}, new RaceMapper());
+        if(races != null && races.size() > 0) {
+            return races.get(0);
+        } else {
+            return null;
+        }
+    }
+    
+    public Race getFirst() {
+        List<Race> races = jdbcTemplate.query(GET_FIRST, new RaceMapper());
         if(races != null && races.size() > 0) {
             return races.get(0);
         } else {
