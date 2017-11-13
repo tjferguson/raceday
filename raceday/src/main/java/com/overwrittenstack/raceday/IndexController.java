@@ -285,7 +285,11 @@ public class IndexController {
             if(bracket.getVech2() != null && bracket.getVech2().getParticipant() != null) {
                 model.addAttribute("vech2name", bracket.getVech2().getParticipant().getName());
                 model.addAttribute("vech2tag", bracket.getVech2().getTag());
+            } else {
+                model.addAttribute("vech2name", "Bye");
+                model.addAttribute("vech2tag", "Bye");
             }
+            
             model.addAttribute("bracket", bracket);
             model.addAttribute("roundNum", bracket.getRound().getRound());
         } else {
