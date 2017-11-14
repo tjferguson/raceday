@@ -1,6 +1,11 @@
 body {
-        background-color: #111;
-        color: #EEE;
+    background-color: #eee;
+    color: #111;
+}
+
+body.admin {
+    background-color: #111;
+    color: #eee;
 }
 
 table {
@@ -12,7 +17,15 @@ table a {
     text-decoration: none;
 }
 
+a.button{
+    color: white;
+    text-decoration: none;
+}
+
+
 #container {
+        color: #EEE;
+        background-color: #111;
         color: #EEE;
         text-align: center;
         margin-left: 50%;
@@ -29,10 +42,11 @@ table a {
     max-width: 400px;
 }
 
-.loginbtn {
-    float: right;
-    color: white;
-    
+.btnPanel {
+    position: absolute;
+    margin: 10px;
+    right: 0px;
+    top: 0px;
 }
 
 
@@ -92,8 +106,17 @@ li.race-bottom{
 
 h1.raceday {
       text-align:center;
-      float:center;
-      margin-bottom: -25px;
+}
+
+h3.races {
+    text-align: center;
+}
+
+h3.races a {
+        text-decoration: none;
+        color: #050505;
+        margin-left:10px;
+        margin-right: 10px;
 }
 
 .mgmtlink {
@@ -114,4 +137,72 @@ h1.raceday {
 
 .vsTable td {
     text-align:center;
+}
+
+a.button {
+    margin-right: 5px;
+    font: bold 11px Arial;
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 2px 12px 2px 12px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+    
+    border-radius: 0.4em;
+    
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+input[type="text"] {
+  display: block;
+  margin: 0;
+  width: 270px;
+  font-family: sans-serif;
+  font-size: 18px;
+  appearance: none;
+  box-shadow: none;
+  border-radius: none;
+    height: 1.75em;
+    border: 1px solid gray;
+    border-radius: 0.4em;
+    padding-right: 10px;
+    padding-left: 10px;
+    
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+input[type="text"]:focus {
+  outline: none;
+}
+
+
+input[type="password"] {
+  display: block;
+  margin: 0;
+  width: 270px;
+  font-family: sans-serif;
+  font-size: 18px;
+  appearance: none;
+  box-shadow: none;
+  border-radius: none;
+    height: 1.75em;
+    border: 1px solid gray;
+    border-radius: 0.4em;
+    padding-right: 10px;
+    padding-left: 10px;
+    
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+input[type="password"]:focus {
+  outline: none;
 }

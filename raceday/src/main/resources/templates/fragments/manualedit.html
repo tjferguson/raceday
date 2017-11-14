@@ -1,0 +1,41 @@
+<div class="form_panel" th:fragment="manualedit">
+    <h1>Brackets Manual Edit</h1>
+    <table>
+        <tr>
+            <th>bracketId</th>
+            <th>Round (Race)</th>
+            <th>Vech1</th>
+            <th>Vech2</th>
+            <th>Winner</th>
+            <th>Save</th>
+        </tr>
+        <tr th:each="b:${brackets}">
+            <th>
+                
+                    <select th:id="${b.bracketId} + '_roundId'">
+                        <option th:each="r:${rounds}" th:value="${r.roundId}" th:text="|${r.race.name} (${r.roundId}) - ${r.round}|" th:selected="${b.roundId==r.roundId}"></option>
+                    </select>
+            </th>
+            <th>
+                <select th:id="${b.bracketId} + '_vech1Id'">
+                    <option th:each="v:${vehicles}" th:text="${v.participant}" th:value="${v.vehicleId}" th:selected="${b.vech1Id==v.vehicleId}" />
+                </select>
+            </th>
+            <th>
+                <select th:id="${b.bracketId} + '_vech2Id'">
+                    <option value="0" th:selected="${b.vech2Id==0}">Bye</option>
+                    <option th:each="v:${vehicles}" th:text="${v.participant}" th:value="${v.vehicleId}" th:selected="${b.vech2Id==v.vehicleId}" />
+                </select>
+            </th>
+            <th>
+                <select th:id="${b.bracketId} + '_winnerId'">
+                    <option />
+                    <option th:each="v:${vehicles}" th:text="${v.participant}" th:value="${v.vehicleId}" th:selected="${b.winnerId==v.vehicleId}" />
+                </select>
+            </th>
+            <th>
+                <input type="button" th:onclick="'saveBracket(\'' + ${b.bracketId} + '\');'" value="Save" />
+            </th>
+        </tr>
+    </table>
+</div>

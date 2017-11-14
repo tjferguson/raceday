@@ -18,6 +18,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("index");
         registry.addViewController("/index").setViewName("index");
+        registry.addViewController("/login").setViewName("login");
     }
 	
     @Bean
@@ -26,7 +27,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
             ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/error/401.html");
             ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/error/404.html");
             ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/500.html");
-            
+
             container.addErrorPages(error401Page, error404Page, error500Page);
             };
     }

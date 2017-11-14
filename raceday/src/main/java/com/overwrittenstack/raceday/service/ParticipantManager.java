@@ -6,9 +6,11 @@ package com.overwrittenstack.raceday.service;
 import com.overwrittenstack.raceday.dao.BracketDao;
 import com.overwrittenstack.raceday.dao.ParticipantDao;
 import com.overwrittenstack.raceday.dao.RaceDao;
+import com.overwrittenstack.raceday.dao.RoundDao;
 import com.overwrittenstack.raceday.dao.VehicleDao;
 import com.overwrittenstack.raceday.model.Participant;
 import com.overwrittenstack.raceday.model.Race;
+import com.overwrittenstack.raceday.model.Round;
 import com.overwrittenstack.raceday.model.Vehicle;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,9 @@ import org.springframework.stereotype.Controller;
 public class ParticipantManager {
     @Autowired
     ParticipantDao pDao;
+    
+    @Autowired
+    RoundDao roundDao;
     
     @Autowired
     RaceDao rDao;
@@ -94,6 +99,18 @@ public class ParticipantManager {
         return v;
     }
     
+    public List<Round> getLoadedRounds() {
+        List<Round> rounds = roundDao.getAll();
+        List<Round> temp = new ArrayList<>();
+        
+        for(Round r: rounds) {
+            int raceId = r.getRaceId();
+            Race race = rDao.get(raceId);
+            r.setRace(race);
+            temp.add(r);
+        }
+        return temp;
+    }
     
     
     public List<Participant> getAllParticipants(boolean loadRace) {

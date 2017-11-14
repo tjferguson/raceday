@@ -60,18 +60,40 @@ public class IndexController {
     
     @RequestMapping("/")
     public ModelAndView getHome(ModelMap model, Principal principal) {
+        List<Race> races = raceDao.getAll();
+        model.addAttribute("races", races);
         Race race = raceDao.getFirst();
+        if(race == null) {
+            race = new Race();
+        }
         System.out.println("Race: " + race + " - " + race.getRaceId());
+        String raceName = race.getName();
+        model.addAttribute("raceName", raceName);
         List<List<Bracket>> brackets = bracketManager.getLoadedBracket(race.getRaceId());
         System.out.println("Brackets: " + brackets);
+        if(brackets.size() > 0) model.addAttribute("valid", true);
+        else model.addAttribute("valid", false);
         model.addAttribute("brackets", brackets);
         return new ModelAndView("index", model);
     }
     
+    
     @RequestMapping("/bracket")
     public ModelAndView getHomeById(@RequestParam("id") int id, ModelMap model) {
-        int raceId = id;
-        List<List<Bracket>> brackets = bracketManager.getLoadedBracket(raceId);
+        List<Race> races = raceDao.getAll();
+        model.addAttribute("races", races);
+        
+        Race race = raceDao.get(id);
+        if(race == null) {
+            race = new Race();
+        }
+        List<List<Bracket>> brackets = bracketManager.getLoadedBracket(race.getRaceId());
+        String raceName = race.getName();
+        
+        if(brackets.size() > 0) model.addAttribute("valid", true);
+        else model.addAttribute("valid", false);
+        
+        model.addAttribute("raceName", raceName);
         model.addAttribute("brackets", brackets);
         return new ModelAndView("index", model);
     }
@@ -324,7 +346,7 @@ public class IndexController {
                 v.setParticipantId(p.getParticipantId());
                 v.setTag(tag);
                 v = vDao.create(v);
-                model.addAttribute("message", "Created new vehicle " + v.getVehicleId()+" &amp; participant " + p.getParticipantId());
+                model.addAttribute("message", "Created new vehicle " + v.getVehicleId()+" and  participant " + p.getParticipantId());
             } catch(Exception e) {
                 model.addAttribute("message", "Failed to create: " + e.getMessage());
                 e.printStackTrace();
@@ -345,6 +367,22 @@ public class IndexController {
         return new ModelAndView("admin", model);
     }
     
+    
+    @RequestMapping("/manualedit")
+    public ModelAndView getManualEdit(ModelMap model, Principal principal) {
+        List<Round> rounds = participantManager.getLoadedRounds();
+        List<Vehicle> vehicles = participantManager.getAllVehicles(true);
+        List<Bracket> brackets = bDao.getAll();
+        
+        model.addAttribute("rounds", rounds);
+        model.addAttribute("vehicles", vehicles);
+        model.addAttribute("page", "manualedit");
+        model.addAttribute("brackets", brackets);
+        
+        return new ModelAndView("admin", model);
+    }
+    
+    
     @PostMapping("/savebracket")
     public @ResponseBody Map<String, String> getSave(@RequestBody WinnerRequest wr) {
         int bracketId = wr.getBracketId();
@@ -361,6 +399,36 @@ public class IndexController {
             r.setCompleted(true);
             roundDao.update(r);
         }
+        
+        Map<String, String> map = new HashMap<>();
+        map.put("status", "valid");
+        map.put("message", "Saved");
+        
+        return map;
+    }
+    
+    @RequestMapping("/race/delete")
+    public ModelAndView deleteRace(@RequestParam("id") int id, ModelMap model) {
+        raceDao.delete(id);
+        model.addAttribute("page", "admin_home");
+        return new ModelAndView("admin", model);
+    }
+    @RequestMapping("/participant/delete")
+    public ModelAndView deletePart(@RequestParam("id") int id, ModelMap model) {
+        pDao.delete(id);
+        model.addAttribute("page", "admin_home");
+        return new ModelAndView("admin", model);
+    }
+    @RequestMapping("/boat/delete")
+    public ModelAndView deleteBoat(@RequestParam("id") int id, ModelMap model) {
+        vDao.delete(id);
+        model.addAttribute("page", "admin_home");
+        return new ModelAndView("admin", model);
+    }
+    
+    @PostMapping("/manual/bracket")
+    public  @ResponseBody Map<String, String> getManualSaveBracket(@RequestBody Bracket bracket) {
+        bDao.update(bracket);
         
         Map<String, String> map = new HashMap<>();
         map.put("status", "valid");

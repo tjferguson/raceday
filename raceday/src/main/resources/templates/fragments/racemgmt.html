@@ -4,7 +4,7 @@
         <tr><th>Race ID</th><th>Name</th></tr>
         <tr th:each="race: ${races}">
             <td>
-                <a th:href="@{/racemgmt2(id=${race.raceId})}" th:text="${race.raceId}" />
+                <a class="button" th:href="@{/racemgmt2(id=${race.raceId})}" th:text="${race.raceId}" />
             </td>
             <td th:text="${race.name}"></td>
         </tr>

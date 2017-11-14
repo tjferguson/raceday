@@ -1,13 +1,13 @@
 <div class="form_panel" th:fragment="races">
     <h1>Races</h1>
     <table>
-        <tr><th>Race ID</th><th>Name</th><th><a href="/race?id=-1">+</a></th></tr>
+        <tr><th>Race ID</th><th>Name</th><th><a class="button" href="/race?id=-1">+</a></th></tr>
         <tr th:each="race: ${races}">
             <td>
-                <a th:href="@{/race(id=${race.raceId})}" th:text="${race.raceId}" />
+                <a class="button" th:href="@{/race(id=${race.raceId})}" th:text="${race.raceId}" />
             </td>
             <td th:text="${race.name}"></td>
-            <td><a th:href="@{/race/delete(id=${race.raceId})}">Del</a></td>
+            <td><a class="button" th:href="@{/race/delete(id=${race.raceId})}">Del</a></td>
         </tr>
     </table>
 </div>

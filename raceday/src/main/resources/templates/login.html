@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Race Day Login</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script lang="javascript" src="scripts/jquery-1.10.0.js"></script>
+        <script lang="javascript" src="scripts/main.js"></script>
+        <link href="css/main.css" media="screen" rel="stylesheet" />
+    </head>
+    <body class="admin">
+        <div id="container">
+            <div class="form_panel">
+                <h1 class="raceday" th:text="|Pack 249 - Rain Gutter Regatta Admin Login|"></h1>
+                <div th:if="${param.error}">
+                    Invalid username and password.
+                </div>
+                <div th:if="${param.logout}">
+                    You have been logged out.
+                </div>
+                <form th:action="@{/login}" method="post">
+                    <div><label><input type="text" name="username" placeholder="Username"/> </label></div>
+                    <div><label><input type="password" name="password" placeholder="Password"/> </label></div>
+                    <div><input type="submit" value="Login"/></div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

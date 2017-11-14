@@ -10,19 +10,24 @@
     </head>
     <body>
         <div id="bracket_container">
-            <h1 class="raceday">Rain Gutter Regatta</h1>
-            <a href="/admin" class="loginbtn">Admin</a>
-            <main id="tournament">
+            <h1 class="raceday" th:text="|Pack 249 - Rain Gutter Regatta - ${raceName}|"></h1>
+            <h3 class="races"><a th:each="race:${races}" th:text="${race.name}" th:href="@{/bracket(id=${race.raceId})}" /></h3>
+            <div class="btnPanel"><a href="/admin" class="loginbtn button">Admin</a></div>
+            
+            <main id="tournament" th:if="${valid}">
                 <ul class="round" th:each="bracket: ${brackets}">
                     <li class="spacer">&nbsp;</li>
                     <th:block th:each="b : ${bracket}">
                         <li class="race race-top" th:text="|${b.vech1.participant} ${b.vech1.tag!=null?'('+b.vech1.tag+')':''}|"></li>
-                        <li class="race race-spacer"><span class='winnerspan' th:text="${b.winner!=null?b.winner.tag:'Not Yet Ran'}"></span>&nbsp;</li>
+                        <li class="race race-spacer"><span class='winnerspan' th:text="${b.winner!=null?b.winner.participant:'Not Yet Ran'}"></span>&nbsp;</li>
                         <li class="race race-bottom" th:text="|${b.vech2.participant} ${b.vech2.tag!=null?'('+b.vech2.tag+')':''}|"></li>
                         <li class="spacer">&nbsp;</li>
                     </th:block>
                 </ul>
             </main>
+            <div th:unless="${valid}">
+                <h3>This race is not yet started</h3>
+            </div>
         </div>
     </body>
 </html>

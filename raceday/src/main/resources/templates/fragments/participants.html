@@ -1,10 +1,10 @@
 <div class="form_panel" th:fragment="participants">
     <h1>Participants</h1>
     <table>
-        <tr><th>Participant ID</th><th>Name</th><th>Race</th><th><a href="/race?id=-1">+</a></th></tr>
+        <tr><th>Participant ID</th><th>Name</th><th>Race</th><th><a class="button" href="/participant?id=-1">+</a></th></tr>
         <tr th:each="participant: ${participants}">
             <td>
-                <a th:href="@{/participant(id=${participant.participantId})}" th:text="${participant.participantId}" />
+                <a class="button" th:href="@{/participant(id=${participant.participantId})}" th:text="${participant.participantId}" />
             </td>
             <td>
                 <div th:text="${participant.name}" />
@@ -12,7 +12,7 @@
             <td>
                 <div th:text="${participant.race.name}" />
             </td>
-            <td><a th:href="@{/participant/delete(id=${participant.participantId})}">Del</a></td>
+            <td><a class="button" th:href="@{/participant/delete(id=${participant.participantId})}">Del</a></td>
         </tr>
     </table>
 </div>
