@@ -21,18 +21,7 @@ $().ready(function() {
         setInterval(function() {
             window.location.reload(true);
           }, 10000);
-    }
-    
-    
-    //Handle manual bracket save
-    /*
-        private int bracketId;
-        private int roundId;    //Need list of rounds
-        private int vech1Id;    //Need list of vehicles (and/or participants loaded)
-        private int vech2Id;
-        private int winnerId;
-     */
-    
+    }   
 });
 
 function saveBracket(bracketId) {
