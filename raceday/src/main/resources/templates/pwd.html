@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pinewood Derby</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script lang="javascript" src="scripts/jquery-1.10.0.js"></script>
+        <script lang="javascript" src="scripts/main.js"></script>
+        <link href="css/main.css" media="screen" rel="stylesheet" />
+    </head>
+    <body>
+        <div id="bracket_container">
+            <h1 class="raceday">Pinewood Derby</h1>
+            <a href="/admin" class="loginbtn">Admin</a>
+            <main id="tournament">
+                <ul class="round" th:each="bracket: ${brackets}">
+                    <li class="spacer">&nbsp;</li>
+                    <th:block th:each="b : ${bracket}">
+                        <li class="race race-top" th:text="|${b.vech1.participant} ${b.vech1.tag!=null?'('+b.vech1.tag+')':''}|"></li>
+                        <li class="race race-spacer"><span class='winnerspan' th:text="${b.winner!=null?b.winner.tag:'Not Yet Ran'}"></span>&nbsp;</li>
+                        <li class="race race-bottom" th:text="|${b.vech2.participant} ${b.vech2.tag!=null?'('+b.vech2.tag+')':''}|"></li>
+                        <li class="spacer">&nbsp;</li>
+                    </th:block>
+                </ul>
+            </main>
+        </div>
+    </body>
+</html>
